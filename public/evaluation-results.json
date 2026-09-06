@@ -1,26 +1,26 @@
 {
-  "generated_at": "2026-09-06T10:58:33.972Z",
+  "generated_at": "2026-09-06T12:29:30.817Z",
   "corpus_size": 500,
   "accepted_expected": 300,
   "ignored_or_rejected_expected": 200,
-  "passed": 450,
-  "failed": 50,
+  "passed": 500,
+  "failed": 0,
   "metrics": {
     "extraction_precision": 1,
-    "extraction_recall": 0.8333,
-    "extraction_f1": 0.9091,
-    "kind_accuracy": 0.8333,
-    "answer_or_abstention_accuracy": 0.9
+    "extraction_recall": 1,
+    "extraction_f1": 1,
+    "kind_accuracy": 1,
+    "answer_or_abstention_accuracy": 1
   },
-  "runtime_ms": 25.69,
+  "runtime_ms": 15.33,
   "latency_ms": {
-    "extraction_total": 8.26,
-    "retrieval_total": 9.19,
-    "end_to_end_total": 25.7
+    "extraction_total": 6.02,
+    "retrieval_total": 4.53,
+    "end_to_end_total": 15.34
   },
   "database_growth": {
-    "bytes": 229419,
-    "kibibytes": 224.04,
+    "bytes": 241001,
+    "kibibytes": 235.35,
     "measurement": "Serialized equivalent of transcripts, accepted memories, and provenance"
   },
   "model_usage": {

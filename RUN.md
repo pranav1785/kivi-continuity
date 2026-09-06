@@ -27,6 +27,7 @@ npm ci
 npm run lint
 npm run build
 npm run corpus:generate
+npm run corpus:audit
 npm run evaluate
 npm run evaluate:dialogsum
 ```
@@ -35,7 +36,7 @@ The hosted method is primary because it supplies and migrates the D1 database bi
 
 ## Candidate evaluation procedure
 
-From the repository root, run `npm ci`, `npm run corpus:generate`, and `npm run evaluate`. The command regenerates all 500 inputs and writes the aggregate report to `data/evaluation-results.json` plus one inspectable row per record to `data/evaluation-traces.jsonl`. The run intentionally exits successfully even when product cases fail; failures remain visible in the report.
+From the repository root, run `npm ci`, `npm run corpus:generate`, `npm run corpus:audit`, and `npm run evaluate`. The audit verifies all 500 synthetic labels, expected outcomes, and retrieval behavior before the evaluator writes the aggregate report to `data/evaluation-results.json` plus one inspectable row per record to `data/evaluation-traces.jsonl`. The DialogSum command separately processes the complete 500-record validation split and writes descriptive coverage traces; it is not an accuracy benchmark because DialogSum does not supply semantic-memory labels.
 
 ## Inspection and reset
 

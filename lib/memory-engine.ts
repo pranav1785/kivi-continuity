@@ -31,6 +31,9 @@ export function extractCandidates(text: string, project: string): CandidateMemor
   const relation = clean.match(/([A-Z][a-z]+)\s+(?:is leading|leads|owns|is responsible for)\s+(.+)/);
   if (relation) results.push({ kind: "fact", subject: `${project} ownership`, value: `${relation[1]} — ${normalize(relation[2])}`, confidence: 0.88, importance: 2, reason: "Named ownership relationship" });
 
+  const durableFact = clean.match(/(?:for the record,?\s+)?([A-Z][A-Za-z0-9 -]+?)\s+(uses|requires|supports|has)\s+(.+)/);
+  if (durableFact) results.push({ kind: "fact", subject: `${project} fact`, value: `${normalize(durableFact[1])} ${durableFact[2]} ${normalize(durableFact[3])}`, confidence: 0.86, importance: 2, reason: "Explicit durable configuration or policy" });
+
   if (/\b(?:maybe|might|not sure|could perhaps|just thinking)\b/i.test(lower)) {
     return results.map((item) => ({ ...item, confidence: Math.min(item.confidence, 0.54), reason: `${item.reason}; uncertainty language detected` }));
   }

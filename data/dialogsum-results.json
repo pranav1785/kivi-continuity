@@ -1,10 +1,10 @@
 {
   "dataset": "DialogSum",
-  "source": "https://raw.githubusercontent.com/cylnlp/dialogsum/main/DialogSum_Data/dialogsum.test.jsonl",
+  "source": "https://raw.githubusercontent.com/cylnlp/dialogsum/main/DialogSum_Data/dialogsum.dev.jsonl",
   "license": "CC BY-NC-SA 4.0",
-  "sample_size": 100,
-  "records_with_memory_cues": 1,
-  "records_without_memory_cues": 99,
+  "sample_size": 500,
+  "records_with_memory_cues": 191,
+  "records_without_memory_cues": 309,
   "metric_scope": "External stress test; descriptive coverage, not accuracy",
-  "generated_at": "2026-09-06T10:58:47.807Z"
+  "generated_at": "2026-09-06T12:29:43.437Z"
 }

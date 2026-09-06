@@ -53,7 +53,7 @@ The corpus is synthetic by design: it provides exact labels, contains no persona
 
 The generated baseline currently passes 450 of 500 cases. Precision is 100%, recall is 83.33%, memory-kind accuracy is 83.33%, and answer/abstention accuracy is 90%. The 50 visible failures are implicit factual statements that the deliberately conservative extractor misses. The report also records extraction, retrieval, and end-to-end latency; serialized database growth; zero model calls; and zero model cost.
 
-`npm run evaluate:dialogsum` runs a separate 100-dialogue stress test using [DialogSum](https://github.com/cylnlp/dialogsum), a public real-life dialogue dataset released under CC BY-NC-SA 4.0. Because DialogSum labels summaries rather than semantic memories, this report measures extraction-cue coverage only and never presents that number as precision or accuracy.
+`npm run evaluate:dialogsum` runs a separate 500-dialogue validation-set stress test using [DialogSum](https://github.com/cylnlp/dialogsum), a public real-life dialogue dataset released under CC BY-NC-SA 4.0. The current run finds explicit durable-memory cues in 191 of 500 dialogues. Because DialogSum labels summaries rather than semantic memories, this report measures cue coverage and source-trace safety only; it never presents that number as precision or accuracy.
 
 ## Current limitations
 
@@ -153,6 +153,7 @@ Use SIWC for account pages, user-specific dashboards, saved records, and write a
 - `npm run build`: build the deployable Sites artifact
 - `npm run start`: start the built Vinext application
 - `npm test`: build and verify the rendered development-preview metadata
+- `npm run corpus:audit`: verify all 500 synthetic labels, expected outcomes, and retrieval behavior
 - `npm run db:generate`: generate Drizzle migrations after schema changes
 
 Use build commands for targeted diagnosis after a remote failure, not as part of the normal checkpoint path.
