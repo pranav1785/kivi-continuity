@@ -40,7 +40,8 @@ export function extractCandidates(text: string, project: string): CandidateMemor
 
 export function retrievalScore(query: string, memory: { subject: string; value: string; project: string; status: string }) {
   if (memory.status !== "active") return 0;
-  const tokens = new Set(query.toLowerCase().match(/[a-z0-9]+/g)?.filter((token) => token.length > 2) ?? []);
+  const stopWords = new Set(["about", "after", "again", "also", "and", "are", "can", "did", "does", "for", "from", "have", "how", "into", "not", "our", "that", "the", "their", "this", "was", "what", "when", "where", "which", "who", "with", "would", "you", "your"]);
+  const tokens = new Set(query.toLowerCase().match(/[a-z0-9]+/g)?.filter((token) => token.length > 2 && !stopWords.has(token)) ?? []);
   const haystack = `${memory.subject} ${memory.value} ${memory.project}`.toLowerCase();
   let score = 0;
   for (const token of tokens) if (haystack.includes(token)) score += 1;

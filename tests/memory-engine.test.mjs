@@ -13,6 +13,10 @@ test("retrieval abstains when only the project name matches", () => {
   assert.equal(retrievalScore("What is the Atlas budget?", decision), 0);
 });
 
+test("retrieval does not treat common question words as evidence", () => {
+  assert.equal(retrievalScore("What is the Atlas budget?", decision), 0);
+});
+
 test("retrieval supports a matching decision question", () => {
   assert.ok(retrievalScore("What did we decide about Atlas?", decision) > 0);
 });
