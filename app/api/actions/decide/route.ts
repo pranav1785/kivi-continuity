@@ -1,0 +1,3 @@
+import { NextResponse } from "next/server";
+import { decideAction } from "@/lib/store";
+export async function POST(request:Request){try{const {actionId,decision}=await request.json() as {actionId?:number;decision?:string};if(!Number.isInteger(actionId)||!(["confirmed","dismissed"] as string[]).includes(decision??""))return NextResponse.json({error:"Choose confirm or dismiss."},{status:400});return NextResponse.json(await decideAction(actionId!,decision as "confirmed"|"dismissed"))}catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Could not update action"},{status:400})}}

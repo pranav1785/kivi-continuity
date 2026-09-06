@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-09-05T18:37:26.459Z",
+  "corpus_size": 500,
+  "accepted_expected": 300,
+  "ignored_or_rejected_expected": 200,
+  "passed": 450,
+  "failed": 50,
+  "metrics": {
+    "extraction_precision": 1,
+    "extraction_recall": 0.8333,
+    "extraction_f1": 0.9091,
+    "kind_accuracy": 0.8333,
+    "answer_or_abstention_accuracy": 0.9
+  },
+  "runtime_ms": 7.66,
+  "latency_ms": {
+    "extraction_total": 3.77,
+    "retrieval_total": 0.92,
+    "end_to_end_total": 7.67
+  },
+  "database_growth": {
+    "bytes": 229419,
+    "kibibytes": 224.04,
+    "measurement": "Serialized equivalent of transcripts, accepted memories, and provenance"
+  },
+  "model_usage": {
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "explanation": "Deterministic baseline uses no model API"
+  },
+  "estimated_model_cost_usd": 0,
+  "notes": [
+    "Deterministic baseline; no model API or hidden judge used.",
+    "Every trace retains original input, decision, provenance, retrieval behavior, and reason."
+  ]
+}

@@ -1,0 +1,15 @@
+"use client";
+
+import { CheckCircle2, CircleHelp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+type Memory = { id:number; kind:string; value:string; project:string; sources:Array<{ id:number; excerpt:string; transcript?:{ app:string; occurredAt:string } }> };
+type Clarification = { id:number; question:string; memoryIds:string; status:string };
+type Props = { memories:Memory[]; clarifications:Clarification[]; busy:boolean; onResolve:(clarificationId:number,selectedMemoryId:number)=>void };
+const tones:Record<string,string>={decision:"bg-[#dff7eb] text-[#16633f]",commitment:"bg-[#e5efff] text-[#2458a6]",deadline:"bg-[#fff0d9] text-[#8a4b0f]",fact:"bg-[#eee9ff] text-[#5f3ea0]",preference:"bg-[#f8e8f2] text-[#8c336c]"};
+
+export function ClarificationPanel({memories,clarifications,busy,onResolve}:Props){
+  const open=clarifications.filter(item=>item.status==="open");
+  return <section className="panel"><div className="border-b border-[#dce5e2] pb-5"><div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[.16em] text-[#8a642e]"><CircleHelp className="size-4"/>User decides</div><h2 className="text-2xl font-semibold text-[#102c2a]">Resolve conflicting memories</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#6d817c]">Kivi never silently overwrites a memory. Compare both sourced versions and choose the one that should remain active.</p></div>{open.length===0?<div className="mt-6 flex items-center gap-3 rounded-2xl bg-[#f1f7f4] p-5 text-sm text-[#58706b]"><CheckCircle2 className="text-[#3f9b70]"/>No unresolved conflicts.</div>:<div className="mt-6 space-y-5">{open.map(item=>{const ids=JSON.parse(item.memoryIds) as number[];const choices=ids.map(id=>memories.find(memory=>memory.id===id)).filter(Boolean) as Memory[];return <article key={item.id} className="rounded-2xl border border-[#e4d7c3] bg-[#fffaf2] p-5"><p className="font-semibold text-[#4b3920]">{item.question}</p><div className="mt-4 grid gap-3 md:grid-cols-2">{choices.map((memory,index)=><div key={memory.id} className="rounded-2xl border border-[#e2ded4] bg-white p-4"><div className="flex items-center justify-between"><Badge className={`${tones[memory.kind]||"bg-gray-100"} border-0 capitalize`}>{memory.kind}</Badge><span className="text-xs text-[#887d6b]">{index===0?"Current":"New"}</span></div><p className="mt-3 text-sm leading-6 text-[#3d4d49]">{memory.value}</p>{memory.sources[0]&&<details className="mt-3 rounded-xl bg-[#f5f7f6] p-3 text-xs text-[#61736f]"><summary className="cursor-pointer font-medium text-[#39715f]">Inspect source</summary><p className="mt-2 leading-5">“{memory.sources[0].excerpt}”</p><p className="mt-2 text-[#87938f]">{memory.sources[0].transcript?.app} · {memory.project}</p></details>}<Button size="sm" disabled={busy} onClick={()=>onResolve(item.id,memory.id)} className="mt-4 w-full bg-[#173f3a]">Keep this version</Button></div>)}</div></article>})}</div>}</section>;
+}
