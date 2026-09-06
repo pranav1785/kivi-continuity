@@ -63,7 +63,7 @@ The generated baseline currently passes 450 of 500 cases. Precision is 100%, rec
 - Public DialogSum coverage is descriptive because the source dataset has no semantic-memory ground truth.
 - The deterministic extractor prioritizes explainability and currently misses implicit facts without an explicit ownership pattern.
 - Cross-application integrations are replayed through supplied metadata; this demonstration does not call production Slack, Gmail, or calendar APIs.
-- Expired and retired memories retain their full provenance for audit rather than being compacted into a later minimal record.
+- Expired and retired memories first become inactive. After 30 inactive days, they are compacted to a minimal archived record and their source links are removed.
 - The candidate-authored Part One documents remain pending and are not generated here.
 
 ## AI use

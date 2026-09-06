@@ -47,5 +47,8 @@ export function retrievalScore(query: string, memory: { subject: string; value: 
   if (/what did we (?:decide|agree)/i.test(query) && memory.subject.includes("decision")) score += 4;
   if (/what (?:did i|am i) (?:promise|commit|responsible)/i.test(query) && memory.subject.includes("commitment")) score += 4;
   if (/when|deadline|due/i.test(query) && memory.subject.includes("deadline")) score += 4;
-  return score;
+  // A lone shared token (often only the project name) is not enough evidence
+  // to answer a factual question. Require either semantic intent or at least
+  // two lexical matches so unsupported questions correctly abstain.
+  return score >= 2 ? score : 0;
 }
