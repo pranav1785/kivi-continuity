@@ -71,3 +71,19 @@ export const settings = sqliteTable("settings", {
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
+
+// Ordinary dictation personalization lives separately from semantic memory.
+// These entries change how Kivi writes, never what it claims to know.
+export const dictionaryEntries = sqliteTable("dictionary_entries", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  heardAs: text("heard_as").notNull(),
+  writeAs: text("write_as").notNull(),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const shortcuts = sqliteTable("shortcuts", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  phrase: text("phrase").notNull(),
+  expansion: text("expansion").notNull(),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});

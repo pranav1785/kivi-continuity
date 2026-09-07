@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { getDb } from "@/db";
-import { actions, clarifications, memories, memoryDecisions, memorySources, settings, transcripts } from "@/db/schema";
+import { actions, clarifications, dictionaryEntries, memories, memoryDecisions, memorySources, settings, shortcuts, transcripts } from "@/db/schema";
 import { extractCandidates, retrievalScore } from "@/lib/memory-engine";
 
 export type TranscriptInput = {
@@ -50,7 +50,10 @@ function retentionScore(memory: { importance:number; confidence:number; useCount
 
 export async function ingestTranscript(input: TranscriptInput) {
   const db = getDb();
-  const formattedText = input.formattedText?.trim() || input.rawText.trim();
+  const [dictionary, shortcutRows] = await Promise.all([db.select().from(dictionaryEntries), db.select().from(shortcuts)]);
+  const baseText = input.formattedText?.trim() || input.rawText.trim();
+  const shortcutExpanded = shortcutRows.reduce((text, entry) => text.replace(new RegExp(`\\b${entry.phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi"), entry.expansion), baseText);
+  const formattedText = dictionary.reduce((text, entry) => text.replace(new RegExp(`\\b${entry.heardAs.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi"), entry.writeAs), shortcutExpanded);
   const [transcript] = await db.insert(transcripts).values({
     rawText: input.rawText.trim(), formattedText, app: input.app, project: input.project,
     occurredAt: input.occurredAt || new Date().toISOString(),
@@ -123,7 +126,7 @@ export async function getState() {
       await db.delete(memorySources).where(eq(memorySources.memoryId, memory.id));
     }
   }
-  const [memoryRows, transcriptRows, sourceRows, decisionRows, clarificationRows, actionRows, settingRows] = await Promise.all([
+  const [memoryRows, transcriptRows, sourceRows, decisionRows, clarificationRows, actionRows, settingRows, dictionaryRows, shortcutRows] = await Promise.all([
     db.select().from(memories).orderBy(desc(memories.updatedAt)),
     db.select().from(transcripts).orderBy(desc(transcripts.occurredAt)),
     db.select().from(memorySources).orderBy(desc(memorySources.id)),
@@ -131,6 +134,8 @@ export async function getState() {
     db.select().from(clarifications).orderBy(desc(clarifications.id)),
     db.select().from(actions).orderBy(desc(actions.id)),
     db.select().from(settings).limit(1),
+    db.select().from(dictionaryEntries).orderBy(desc(dictionaryEntries.id)),
+    db.select().from(shortcuts).orderBy(desc(shortcuts.id)),
   ]);
   const enrichedMemories = memoryRows.map((memory) => ({
     ...memory,
@@ -140,7 +145,7 @@ export async function getState() {
       transcript: transcriptRows.find((transcript) => transcript.id === source.transcriptId),
     })),
   }));
-  return { memories: enrichedMemories, transcripts: transcriptRows, decisions: decisionRows, clarifications: clarificationRows, actions: actionRows, settings: settingRows[0] };
+  return { memories: enrichedMemories, transcripts: transcriptRows, decisions: decisionRows, clarifications: clarificationRows, actions: actionRows, settings: settingRows[0], dictionary: dictionaryRows, shortcuts: shortcutRows };
 }
 
 export async function answerQuestion(question: string) {
@@ -191,9 +196,26 @@ export async function resetAndSeed() {
   await db.delete(memories);
   await db.delete(transcripts);
   await db.delete(settings);
+  await db.delete(dictionaryEntries);
+  await db.delete(shortcuts);
   await ensureSeeded();
   return getState();
 }
+
+export async function addDictionaryEntry(input: { heardAs?: string; writeAs?: string }) {
+  const heardAs = input.heardAs?.trim(); const writeAs = input.writeAs?.trim();
+  if (!heardAs || !writeAs) throw new Error("Both the spoken term and the preferred spelling are required.");
+  await getDb().insert(dictionaryEntries).values({ heardAs, writeAs });
+  return getState();
+}
+
+export async function removeDictionaryEntry(id: number) { await getDb().delete(dictionaryEntries).where(eq(dictionaryEntries.id, id)); return getState(); }
+export async function addShortcut(input: { phrase?: string; expansion?: string }) {
+  const phrase = input.phrase?.trim(); const expansion = input.expansion?.trim();
+  if (!phrase || !expansion) throw new Error("Both the shortcut and its expansion are required.");
+  await getDb().insert(shortcuts).values({ phrase, expansion }); return getState();
+}
+export async function removeShortcut(id: number) { await getDb().delete(shortcuts).where(eq(shortcuts.id, id)); return getState(); }
 
 export async function resolveClarification(clarificationId: number, selectedMemoryId: number) {
   const db = getDb();
