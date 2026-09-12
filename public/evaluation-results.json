@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T12:29:30.817Z",
+  "generated_at": "2026-09-12T10:34:25.712Z",
   "corpus_size": 500,
   "accepted_expected": 300,
   "ignored_or_rejected_expected": 200,
@@ -12,11 +12,11 @@
     "kind_accuracy": 1,
     "answer_or_abstention_accuracy": 1
   },
-  "runtime_ms": 15.33,
+  "runtime_ms": 8.99,
   "latency_ms": {
-    "extraction_total": 6.02,
-    "retrieval_total": 4.53,
-    "end_to_end_total": 15.34
+    "extraction_total": 5.03,
+    "retrieval_total": 1.37,
+    "end_to_end_total": 9.01
   },
   "database_growth": {
     "bytes": 241001,

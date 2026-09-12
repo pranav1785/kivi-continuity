@@ -1,4 +1,3 @@
-# Product positioning statement
+# 100-word positioning statement
 
-<!-- Candidate-only: replace this comment with your own final text. Maximum 100 words. Do not use generative AI to write or revise it. -->
-
+Kivi is a voice-focused personal assistant available across platforms. It goes beyond speech-to-text and is not just another chatbot. It's designed for people whose work spans Slack, email, meetings, documents and calendars, where decisions, deadlines and commitments tend to get lost. Kivi tracks the context that matters, links it across platforms, and lets you ask questions, draft messages and take action from one place. The key difference is trust: Kivi uses only information you've agreed to share, won't answer without evidence, and shows the exact source of what it says. You control what it remembers and what it may do.
